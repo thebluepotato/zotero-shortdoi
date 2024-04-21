@@ -14,6 +14,7 @@
         em:homepageURL="https://github.com/bwiernik/zotero-shortdoi"
         em:updateURL="https://raw.githubusercontent.com/bwiernik/zotero-shortdoi/master/update.rdf">
         <em:type>2</em:type>
+        <em:bootstrap>true</em:bootstrap>
         <em:targetApplication>
             <Description>
                 <em:id>zotero@chnm.gmu.edu</em:id>
