@@ -1,7 +1,6 @@
-content zoteroshortdoi chrome/content/
+content zoteroshortdoi  chrome/content/
 
-overlay chrome://zotero/content/zoteroPane.xul chrome://zoteroshortdoi/content/overlay.xul
-
-locale  zoteroshortdoi  en-US   chrome/locale/en-US/
+locale  zoteroshortdoi  en-US   locale/en-US/
+locale  zoteroshortdoi  de      locale/de/
 
 skin    zoteroshortdoi  default chrome/skin/default/zoteroshortdoi/

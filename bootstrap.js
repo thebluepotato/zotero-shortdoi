@@ -139,17 +139,24 @@ async function startup({ id, version, resourceURI, rootURI = resourceURI.spec })
     var aomStartup = Cc["@mozilla.org/addons/addon-manager-startup;1"].getService(Ci.amIAddonManagerStartup);
     var manifestURI = Services.io.newURI(rootURI + "manifest.json");
     chromeHandle = aomStartup.registerChrome(manifestURI, [
-        //["content", "make-it-red", "chrome/content/"],
-        ["locale", "zoteroshortdoi", "en-US", "chrome/locale/en-US/"],
-        ["locale", "zoteroshortdoi", "de", "chrome/locale/de/"],
-        //["skin", "zoteroshortdoi", "default", "chrome/skin/default/zoteroshortdoi/"],
+        ["locale", "zoteroshortdoi", "en-US", "locale/en-US/"],
+        ["locale", "zoteroshortdoi", "de", "locale/de/"]
     ]);
     
     Services.scriptloader.loadSubScript(rootURI + 'zoteroshortdoi.js');
     
     ShortDOI.init({ id, version, rootURI });
+    
+    if (Zotero.platformMajorVersion >= 102) {
+        Zotero.PreferencePanes.register({
+            pluginID: 'zoteroshortdoi@wiernik.org',
+            src: 'options.xhtml',
+            //scripts: ['prefs.js'],
+            //stylesheets: ['prefs.css'],
+        });
+    }
+    
     ShortDOI.addToAllWindows();
-    await ShortDOI.main();
 }
 
 function onMainWindowLoad({ window }) {
@@ -170,6 +177,9 @@ function shutdown() {
     if (Zotero.platformMajorVersion < 102) {
         removeMainWindowListener();
     }
+    
+    chromeHandle.destruct();
+    chromeHandle = null;
     
     ShortDOI.removeFromAllWindows();
     ShortDOI = undefined;

@@ -4,6 +4,10 @@
     "version": "1.5.0",
     "description": "Plugin for fetching and validating DOI and shortDOI names",
     "author": "Brenton M. Wiernik",
+    "icons": {
+      "48": "icon.png",
+      "96": "icon@2x.png"
+    },
     "applications": {
         "zotero": {
             "id": "zoteroshortdoi@wiernik.org",
