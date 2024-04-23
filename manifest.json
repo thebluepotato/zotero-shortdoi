@@ -5,8 +5,8 @@
     "description": "Plugin for fetching and validating DOI and shortDOI names",
     "author": "Brenton M. Wiernik",
     "icons": {
-      "48": "icon.png",
-      "96": "icon@2x.png"
+      "48": "skin/icon.png",
+      "96": "skin/icon@2x.png"
     },
     "applications": {
         "zotero": {

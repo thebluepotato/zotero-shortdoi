@@ -1,6 +1,6 @@
-content zoteroshortdoi  chrome/content/
+content zoteroshortdoi  content/
 
 locale  zoteroshortdoi  en-US   locale/en-US/
 locale  zoteroshortdoi  de      locale/de/
 
-skin    zoteroshortdoi  default chrome/skin/default/zoteroshortdoi/
+skin    zoteroshortdoi  default skin/

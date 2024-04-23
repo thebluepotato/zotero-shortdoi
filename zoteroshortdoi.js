@@ -394,7 +394,7 @@ ShortDOI.updateItems = function(items, operation) {
     } else {
         ShortDOI.progressWindow.changeHeadline("Validating DOIs and removing extra text", icon);
     }
-    let iconPath = _is7 ? this.rootURI + 'chrome/skin/default/zoteroshortdoi/doi' : 'chrome://zoteroshortdoi/skin/doi';
+    let iconPath = _is7 ? this.rootURI + 'skin/doi' : 'chrome://zoteroshortdoi/skin/doi';
     var doiIcon = iconPath + (Zotero.hiDPI ? "@2x" : "") + '.png';
     ShortDOI.progressWindow.progress = new ShortDOI.progressWindow.ItemProgress(doiIcon, "Checking DOIs.");
 
