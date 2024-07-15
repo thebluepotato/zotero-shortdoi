@@ -2,12 +2,12 @@ if (typeof Zotero == 'undefined') {
     var Zotero;
 }
 var ShortDOI;
-var chromeHandle
+var chromeHandle;
 
 let mainWindowListener;
 
 function log(msg) {
-    Zotero.debug("DOI Manager: " + msg);
+    Zotero.debug("DOI Manager TEST: " + msg);
 }
 
 // In Zotero 6, bootstrap methods are called before Zotero is initialized, and using include.js
@@ -21,7 +21,7 @@ async function waitForZotero() {
         await Zotero.initializationPromise;
         return;
     }
-    
+
     var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
     var windows = Services.wm.getEnumerator('navigator:browser');
     var found = false;
@@ -38,17 +38,28 @@ async function waitForZotero() {
             var listener = {
                 onOpenWindow: function (aWindow) {
                     // Wait for the window to finish loading
-                    let domWindow = aWindow.QueryInterface(Ci.nsIInterfaceRequestor)
-                        .getInterface(Ci.nsIDOMWindowInternal || Ci.nsIDOMWindow);
-                    domWindow.addEventListener("load", function () {
-                        domWindow.removeEventListener("load", arguments.callee, false);
-                        if (domWindow.Zotero) {
-                            Services.wm.removeListener(listener);
-                            Zotero = domWindow.Zotero;
-                            resolve();
-                        }
-                    }, false);
-                }
+                    let domWindow = aWindow
+                        .QueryInterface(Ci.nsIInterfaceRequestor)
+                        .getInterface(
+                            Ci.nsIDOMWindowInternal || Ci.nsIDOMWindow
+                        );
+                    domWindow.addEventListener(
+                        "load",
+                        function () {
+                            domWindow.removeEventListener(
+                                "load",
+                                arguments.callee,
+                                false
+                            );
+                            if (domWindow.Zotero) {
+                                Services.wm.removeListener(listener);
+                                Zotero = domWindow.Zotero;
+                                resolve();
+                            }
+                        },
+                        false
+                    );
+                },
             };
             Services.wm.addListener(listener);
         });
@@ -60,11 +71,15 @@ async function waitForZotero() {
 function listenForMainWindowEvents() {
     mainWindowListener = {
         onOpenWindow: function (aWindow) {
-            let domWindow = aWindow.QueryInterface(Ci.nsIInterfaceRequestor)
+            let domWindow = aWindow
+                .QueryInterface(Ci.nsIInterfaceRequestor)
                 .getInterface(Ci.nsIDOMWindowInternal || Ci.nsIDOMWindow);
             async function onload() {
                 domWindow.removeEventListener("load", onload, false);
-                if (domWindow.location.href !== "chrome://zotero/content/standalone/standalone.xul") {
+                if (
+                    domWindow.location.href !==
+                    "chrome://zotero/content/standalone/standalone.xul"
+                ) {
                     return;
                 }
                 onMainWindowLoad({ window: domWindow });
@@ -72,9 +87,13 @@ function listenForMainWindowEvents() {
             domWindow.addEventListener("load", onload, false);
         },
         onCloseWindow: async function (aWindow) {
-            let domWindow = aWindow.QueryInterface(Ci.nsIInterfaceRequestor)
+            let domWindow = aWindow
+                .QueryInterface(Ci.nsIInterfaceRequestor)
                 .getInterface(Ci.nsIDOMWindowInternal || Ci.nsIDOMWindow);
-            if (domWindow.location.href !== "chrome://zotero/content/standalone/standalone.xul") {
+            if (
+                domWindow.location.href !==
+                "chrome://zotero/content/standalone/standalone.xul"
+            ) {
                 return;
             }
             onMainWindowUnload({ window: domWindow });
@@ -105,29 +124,29 @@ function setDefaultPrefs(rootURI) {
                     branch.setIntPref(pref, value);
                     break;
                 default:
-                    Zotero.logError(`Invalid type '${typeof(value)}' for pref '${pref}'`);
+                    Zotero.logError(`Invalid type '${typeof (value)}' for pref '${pref}'`);
             }
-        }
+        },
     };
     Services.scriptloader.loadSubScript(rootURI + "prefs.js", obj);
 }
 
 async function install() {
     await waitForZotero();
-    
+
     log("Installed");
 }
 
 async function startup({ id, version, resourceURI, rootURI = resourceURI.spec }) {
     await waitForZotero();
-    
+
     log("Starting");
-    
+
     // 'Services' may not be available in Zotero 6
     if (typeof Services == 'undefined') {
         var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
     }
-    
+
     if (Zotero.platformMajorVersion < 102) {
         // Listen for window load/unload events in Zotero 6, since onMainWindowLoad/Unload don't
         // get called
@@ -135,18 +154,20 @@ async function startup({ id, version, resourceURI, rootURI = resourceURI.spec })
         // Read prefs from prefs.js in Zotero 6
         setDefaultPrefs(rootURI);
     }
-    
-    var aomStartup = Cc["@mozilla.org/addons/addon-manager-startup;1"].getService(Ci.amIAddonManagerStartup);
+
+    var aomStartup = Cc[
+        "@mozilla.org/addons/addon-manager-startup;1"
+    ].getService(Ci.amIAddonManagerStartup);
     var manifestURI = Services.io.newURI(rootURI + "manifest.json");
     chromeHandle = aomStartup.registerChrome(manifestURI, [
         ["locale", "zoteroshortdoi", "en-US", "locale/en-US/"],
-        ["locale", "zoteroshortdoi", "de", "locale/de/"]
+        ["locale", "zoteroshortdoi", "de", "locale/de/"],
     ]);
-    
-    Services.scriptloader.loadSubScript(rootURI + 'zoteroshortdoi.js');
-    
+
+    Services.scriptloader.loadSubScript(rootURI + "zoteroshortdoi.js");
+
     ShortDOI.init({ id, version, rootURI });
-    
+
     if (Zotero.platformMajorVersion >= 102) {
         Zotero.PreferencePanes.register({
             pluginID: 'zoteroshortdoi@wiernik.org',
@@ -155,7 +176,7 @@ async function startup({ id, version, resourceURI, rootURI = resourceURI.spec })
             //stylesheets: ['prefs.css'],
         });
     }
-    
+
     ShortDOI.addToAllWindows();
 }
 
@@ -165,22 +186,29 @@ function onMainWindowLoad({ window }) {
 
 function onMainWindowUnload({ window }) {
     ShortDOI.removeFromWindow(window);
-    
-    window.addEventListener('unload', function(e) {
-        Zotero.Notifier.unregisterObserver(ShortDOI.notifierID);
-    }, false);
+
+    window.addEventListener(
+        "unload",
+        function (e) {
+            Zotero.Notifier.unregisterObserver(ShortDOI.notifierID);
+        },
+        false
+    );
 }
 
 function shutdown() {
     log("Shutting down");
-    
+
+    log(ShortDOI);
+    log(Object.keys(ShortDOI));
+
     if (Zotero.platformMajorVersion < 102) {
         removeMainWindowListener();
     }
-    
+
     chromeHandle.destruct();
     chromeHandle = null;
-    
+
     ShortDOI.removeFromAllWindows();
     ShortDOI = undefined;
 }
@@ -191,6 +219,6 @@ function uninstall() {
         dump("DOI Manager: Uninstalled\n\n");
         return;
     }
-    
+
     log("Uninstalled");
 }
