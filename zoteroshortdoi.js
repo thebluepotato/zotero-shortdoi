@@ -24,7 +24,7 @@ ShortDOI = {
     notifierID: null,
 
     log(msg) {
-        Zotero.debug("Make It Red: " + msg);
+        Zotero.debug("DOI Manager: " + msg);
     },
 
     // Preference managers
@@ -56,6 +56,8 @@ ShortDOI = {
     // Overlay management
 
     addToWindow(window) {
+        log("Updating window")
+
         let doc = window.document;
 
         // createElementNS() necessary in Zotero 6; createElement() defaults to HTML in Zotero 7
@@ -235,7 +237,7 @@ ShortDOI = {
             let elem = doc.getElementById(id);
             if (elem) elem.remove();
         }
-        doc.querySelector('[href="zoteroshortdoi.ftl"]').remove();
+        //doc.querySelector('[href="zoteroshortdoi.ftl"]').remove();
     },
 
     removeFromAllWindows() {
@@ -582,7 +584,7 @@ ShortDOI.updateItem = function (item, operation) {
             req.onreadystatechange = function () {
                 if (req.readyState == 4) {
                     if (req.status == 200) {
-                        if (item.isRegularItem() && !item.isCollection()) {
+                        if (item.isRegularItem()) {
                             if (oldDOI.match(/10\/[^\s]*[^\s\.,]/)) {
                                 if (req.response.responseCode == 1) {
                                     if (req.response.handle != oldDOI) {
@@ -652,10 +654,7 @@ ShortDOI.updateItem = function (item, operation) {
                     if (req.status == 200) {
                         if (req.response.responseCode == 1) {
                             if (oldDOI.match(/10\/[^\s]*[^\s\.,]/)) {
-                                if (
-                                    item.isRegularItem() &&
-                                    !item.isCollection()
-                                ) {
+                                if (item.isRegularItem()) {
                                     var longDOI = req.response.values[
                                         "1"
                                     ].data.value.toLowerCase();
@@ -768,7 +767,7 @@ ShortDOI.updateItem = function (item, operation) {
 };
 
 ShortDOI.invalidate = function (item, operation) {
-    if (item.isRegularItem() && !item.isCollection()) {
+    if (item.isRegularItem()) {
         error_invalid = true;
         if (ShortDOI.getPref("tag_invalid") !== "")
             item.addTag(ShortDOI.getPref("tag_invalid"), 1);

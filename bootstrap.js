@@ -7,7 +7,7 @@ var chromeHandle;
 let mainWindowListener;
 
 function log(msg) {
-    Zotero.debug("DOI Manager TEST: " + msg);
+    Zotero.debug("DOI Manager: " + msg);
 }
 
 // In Zotero 6, bootstrap methods are called before Zotero is initialized, and using include.js
@@ -171,7 +171,7 @@ async function startup({ id, version, resourceURI, rootURI = resourceURI.spec })
     if (Zotero.platformMajorVersion >= 102) {
         Zotero.PreferencePanes.register({
             pluginID: 'zoteroshortdoi@wiernik.org',
-            src: 'options.xhtml',
+            src: rootURI + 'options.xhtml',
             //scripts: ['prefs.js'],
             //stylesheets: ['prefs.css'],
         });
