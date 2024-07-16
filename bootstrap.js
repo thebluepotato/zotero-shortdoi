@@ -199,9 +199,6 @@ function onMainWindowUnload({ window }) {
 function shutdown() {
     log("Shutting down");
 
-    log(ShortDOI);
-    log(Object.keys(ShortDOI));
-
     if (Zotero.platformMajorVersion < 102) {
         removeMainWindowListener();
     }

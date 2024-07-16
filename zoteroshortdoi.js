@@ -260,7 +260,7 @@ ShortDOI = {
                     case "long":
                         ShortDOI.updateItems(Zotero.Items.get(ids), "long");
                         break;
-                    case "verify":
+                    case "check":
                         ShortDOI.updateItems(Zotero.Items.get(ids), "check");
                         break;
                     default:
