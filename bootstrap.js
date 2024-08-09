@@ -171,7 +171,7 @@ async function startup({ id, version, resourceURI, rootURI = resourceURI.spec })
     if (Zotero.platformMajorVersion >= 102) {
         Zotero.PreferencePanes.register({
             pluginID: 'zoteroshortdoi@wiernik.org',
-            src: rootURI + 'options.xhtml',
+            src: rootURI + 'content/options.xhtml',
             //scripts: ['prefs.js'],
             //stylesheets: ['prefs.css'],
         });

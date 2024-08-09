@@ -5,13 +5,13 @@
       <rdf:Seq>
         <rdf:li>
           <rdf:Description>
-            <em:version>1.5.0</em:version>
+            <em:version>1.5.1</em:version>
             <em:targetApplication>
               <rdf:Description>
                 <em:id>zotero@chnm.gmu.edu</em:id>
                 <em:minVersion>6.0</em:minVersion>
                 <em:maxVersion>7.*</em:maxVersion>
-                <em:updateLink>https://github.com/bwiernik/zotero-shortdoi/releases/download/v1.5.0/zotero-doi-manager-1.5.0.xpi</em:updateLink>
+                <em:updateLink>https://github.com/bwiernik/zotero-shortdoi/releases/download/v1.5.1/zotero-doi-manager-1.5.1.xpi</em:updateLink>
               </rdf:Description>
             </em:targetApplication>
             <em:targetApplication>
